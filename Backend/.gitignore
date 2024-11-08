@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-
-.vscode/
+# Ignore IntelliJ IDEA project files
 .idea/
+
+# Ignore Visual Studio Code settings
+.vscode/
+
