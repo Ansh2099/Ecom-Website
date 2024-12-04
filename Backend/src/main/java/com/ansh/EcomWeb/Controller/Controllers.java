@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
+
+import javax.print.DocFlavor;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -51,6 +54,38 @@ public class Controllers {
         byte[] imageFile = product.getImageData();
         return ResponseEntity.ok().contentType(MediaType.valueOf(product.getImageType())).body(imageFile);
 
+    }
+
+    @PutMapping("/product/{id}/{imageFile}")
+    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product product, MultipartFile imageFile) throws IOException {
+
+        Product prod = service.getProduct(id);
+
+        if (prod != null){
+            return new ResponseEntity<>(service.updateProduct(product, imageFile), HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
+
+        Product prod = service.getProduct(id);
+
+        if (prod != null){
+            service.deleteProduct(id);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/products/search")
+    public ResponseEntity<List<Product>> SearchByKeyword(@RequestParam String keyword){
+        List<Product> products = service.searchfunction(keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
 }

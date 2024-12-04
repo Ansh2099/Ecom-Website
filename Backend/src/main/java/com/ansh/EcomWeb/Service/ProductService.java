@@ -3,6 +3,7 @@ package com.ansh.EcomWeb.Service;
 import com.ansh.EcomWeb.Model.Product;
 import com.ansh.EcomWeb.Repositery.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -34,4 +35,20 @@ public class ProductService {
     }
 
 
+    public Product updateProduct(Product product, MultipartFile imageFile) throws IOException {
+        
+        product.setImageName(imageFile.getOriginalFilename());
+        product.setImageData(imageFile.getBytes());
+        product.setImageType(imageFile.getContentType());
+        
+        return repo.save(product);
+    }
+
+    public void deleteProduct(int id) {
+         repo.deleteById(id);
+    }
+
+    public List<Product> searchfunction(String keyword) {
+        return repo.searchByKeyword(keyword);
+    }
 }
